@@ -2,29 +2,54 @@ document.addEventListener("DOMContentLoaded", function () {
     "use strict";
 
     /* =========================================================
-       KONFIGURASI GOOGLE APPS SCRIPT
-    ========================================================= */
+       SANAK DIGITAL
+       PETUALANGAN SANAK DIGITAL
+       BANK INDONESIA PROVINSI RIAU
+       ========================================================= */
+
+
+    /* =========================================================
+       GOOGLE APPS SCRIPT API
+       ========================================================= */
 
     const API_URL =
         "https://script.google.com/macros/s/AKfycbwjpw-iAGPVjeBgJFMX0QgSBwB4U7y68WmATkwB1hcnxPlFuNDJWNGMe2TSnq6omgyz/exec";
 
 
     /* =========================================================
+       PENGATURAN KOMPRESI FOTO
+       ========================================================= */
+
+    const MAX_FILE_SIZE =
+        10 * 1024 * 1024; // 10 MB
+
+    const MAX_IMAGE_SIZE =
+        1600; // maksimal lebar / tinggi
+
+    const JPEG_QUALITY =
+        0.75; // kualitas 75%
+
+
+    /* =========================================================
        HELPER
-    ========================================================= */
+       ========================================================= */
 
     function getElement(id) {
         return document.getElementById(id);
     }
+
 
     function getAll(selector) {
         return document.querySelectorAll(selector);
     }
 
 
+    let currentStep = 1;
+
+
     /* =========================================================
        ELEMENT
-    ========================================================= */
+       ========================================================= */
 
     const startButton =
         getElement("startButton");
@@ -57,59 +82,119 @@ document.addEventListener("DOMContentLoaded", function () {
         getElement("agreement");
 
 
-    let currentStep = 1;
+    /* =========================================================
+       7 FILE UPLOAD
+       ========================================================= */
+
+    const uploadInputs = [
+
+        "selfie",
+
+        "accountProof",
+
+        "newAccount",
+
+        "qrisProof",
+
+        "qrisEducation",
+
+        "postTest",
+
+        "postTestProof"
+
+    ];
+
+
+    /* =========================================================
+       NAMA DOKUMEN
+       ========================================================= */
+
+    const documentNames = {
+
+        selfie:
+            "Foto Selfie",
+
+        accountProof:
+            "Bukti Kepemilikan Akun",
+
+        newAccount:
+            "Akun Baru Dibuat",
+
+        qrisProof:
+            "Transaksi QRIS Rp1",
+
+        qrisEducation:
+            "Edukasi QRIS",
+
+        postTest:
+            "Pengerjaan Post Test",
+
+        postTestProof:
+            "Selesai Pengerjaan Post Test"
+
+    };
 
 
     /* =========================================================
        SHOW STEP
-    ========================================================= */
+       ========================================================= */
 
     function showStep(stepNumber) {
 
-        currentStep = stepNumber;
+        currentStep =
+            stepNumber;
+
 
         const steps =
             getAll(".form-step");
 
-        const stepIndicators =
+
+        const indicators =
             getAll(".step");
 
 
         steps.forEach(function (step) {
 
-            step.classList.remove("active");
+            step.classList.remove(
+                "active"
+            );
+
 
             if (
                 step.id ===
-                    "step" + stepNumber ||
+                "step" + stepNumber ||
+
                 step.dataset.step ===
-                    String(stepNumber)
+                String(stepNumber)
             ) {
 
-                step.classList.add("active");
+                step.classList.add(
+                    "active"
+                );
 
             }
 
         });
 
 
-        stepIndicators.forEach(
+        indicators.forEach(
             function (step, index) {
 
                 const number =
                     index + 1;
 
+
+                step.classList.remove(
+                    "active"
+                );
+
+
                 if (
-                    number === stepNumber
+                    number ===
+                    stepNumber
                 ) {
 
                     step.classList.add(
-                        "active"
-                    );
-
-                } else {
-
-                    step.classList.remove(
                         "active"
                     );
 
@@ -132,21 +217,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       ERROR
-    ========================================================= */
+       CLEAR ERROR
+       ========================================================= */
 
     function clearErrors() {
 
-        getAll(".error").forEach(
-            function (error) {
+        getAll(".error")
+            .forEach(function (error) {
 
-                error.textContent = "";
+                error.textContent =
+                    "";
 
-            }
-        );
+            });
 
     }
 
+
+    /* =========================================================
+       SHOW ERROR
+       ========================================================= */
 
     function showError(
         id,
@@ -155,6 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const error =
             getElement(id);
+
 
         if (error) {
 
@@ -167,8 +257,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       VALIDASI DATA DIRI
-    ========================================================= */
+       VALIDASI DATA PRIBADI
+       ========================================================= */
 
     function validatePersonalData() {
 
@@ -177,10 +267,13 @@ document.addEventListener("DOMContentLoaded", function () {
         let valid = true;
 
 
-        /* NAMA */
+        /* =====================================================
+           NAMA
+        ===================================================== */
 
         const nama =
             getElement("nama");
+
 
         if (
             nama &&
@@ -197,16 +290,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* NIK */
+        /* =====================================================
+           NIK
+        ===================================================== */
 
         const nik =
             getElement("nik");
+
 
         if (nik) {
 
             const nikValue =
                 nik.value
                     .replace(/\D/g, "");
+
 
             if (
                 nikValue === ""
@@ -219,7 +316,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 valid = false;
 
-            } else if (
+            }
+
+            else if (
                 nikValue.length !== 16
             ) {
 
@@ -235,16 +334,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* PHONE */
+        /* =====================================================
+           NOMOR HP
+        ===================================================== */
 
         const phone =
             getElement("phone");
+
 
         if (phone) {
 
             const phoneValue =
                 phone.value
                     .replace(/\D/g, "");
+
 
             if (
                 phoneValue === ""
@@ -257,10 +360,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 valid = false;
 
-            } else if (
-                !/^08\d{8,13}$/.test(
-                    phoneValue
-                )
+            }
+
+            else if (
+                !/^08\d{8,13}$/
+                    .test(phoneValue)
             ) {
 
                 showError(
@@ -275,18 +379,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* EMAIL */
+        /* =====================================================
+           EMAIL
+        ===================================================== */
 
         const email =
             getElement("email");
+
 
         if (email) {
 
             const emailValue =
                 email.value.trim();
 
+
             const emailPattern =
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
             if (
                 emailValue === ""
@@ -299,7 +408,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 valid = false;
 
-            } else if (
+            }
+
+            else if (
                 !emailPattern.test(
                     emailValue
                 )
@@ -317,10 +428,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* KABUPATEN */
+        /* =====================================================
+           KABUPATEN / KOTA
+        ===================================================== */
 
         const kabupaten =
             getElement("kabupaten");
+
 
         if (
             kabupaten &&
@@ -343,47 +457,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       7 FOTO
-    ========================================================= */
-
-    const uploadInputs = [
-
-        "selfie",
-        "accountProof",
-        "newAccount",
-        "qrisProof",
-        "qrisEducation",
-        "postTest",
-        "postTestProof"
-
-    ];
-
-
-    const uploadMessages = {
-
-        selfie:
-            "Foto selfie wajib diunggah.",
-
-        accountProof:
-            "Foto bukti kepemilikan akun wajib diunggah.",
-
-        newAccount:
-            "Foto bukti akun baru wajib diunggah.",
-
-        qrisProof:
-            "Foto bukti transaksi QRIS Rp1 wajib diunggah.",
-
-        qrisEducation:
-            "Foto edukasi QRIS wajib diunggah.",
-
-        postTest:
-            "Foto pengerjaan post test wajib diunggah.",
-
-        postTestProof:
-            "Foto selesai pengerjaan post test wajib diunggah."
-
-    };
-
+       VALIDASI 7 FOTO
+       ========================================================= */
 
     function validateUploads() {
 
@@ -392,16 +467,71 @@ document.addEventListener("DOMContentLoaded", function () {
         let valid = true;
 
 
-        uploadInputs.forEach(
-            function (id) {
+        const uploads = [
+
+            {
+                id: "selfie",
+                error: "selfieError",
+                message:
+                    "Foto selfie wajib diunggah."
+            },
+
+            {
+                id: "accountProof",
+                error:
+                    "accountProofError",
+                message:
+                    "Foto bukti kepemilikan akun wajib diunggah."
+            },
+
+            {
+                id: "newAccount",
+                error:
+                    "newAccountError",
+                message:
+                    "Foto bukti akun baru wajib diunggah."
+            },
+
+            {
+                id: "qrisProof",
+                error:
+                    "qrisProofError",
+                message:
+                    "Foto bukti transaksi QRIS Rp1 wajib diunggah."
+            },
+
+            {
+                id: "qrisEducation",
+                error:
+                    "qrisEducationError",
+                message:
+                    "Foto edukasi QRIS wajib diunggah."
+            },
+
+            {
+                id: "postTest",
+                error:
+                    "postTestError",
+                message:
+                    "Foto pengerjaan post test wajib diunggah."
+            },
+
+            {
+                id: "postTestProof",
+                error:
+                    "postTestProofError",
+                message:
+                    "Foto selesai pengerjaan post test wajib diunggah."
+            }
+
+        ];
+
+
+        uploads.forEach(
+            function (item) {
 
                 const input =
-                    getElement(id);
-
-                const error =
-                    getElement(
-                        id + "Error"
-                    );
+                    getElement(item.id);
 
 
                 if (
@@ -410,12 +540,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     input.files.length === 0
                 ) {
 
-                    if (error) {
-
-                        error.textContent =
-                            uploadMessages[id];
-
-                    }
+                    showError(
+                        item.error,
+                        item.message
+                    );
 
                     valid = false;
 
@@ -431,13 +559,205 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
+       START BUTTON
+       ========================================================= */
+
+    if (startButton) {
+
+        startButton.type =
+            "button";
+
+
+        startButton.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                showStep(1);
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       NEXT STEP 1
+       ========================================================= */
+
+    if (nextStep1) {
+
+        nextStep1.type =
+            "button";
+
+
+        nextStep1.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+
+                const valid =
+                    validatePersonalData();
+
+
+                if (valid) {
+
+                    showStep(2);
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       PREVIOUS STEP 2
+       ========================================================= */
+
+    if (prevStep2) {
+
+        prevStep2.type =
+            "button";
+
+
+        prevStep2.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                showStep(1);
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       NEXT STEP 2
+       ========================================================= */
+
+    if (nextStep2) {
+
+        nextStep2.type =
+            "button";
+
+
+        nextStep2.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+
+                const valid =
+                    validateUploads();
+
+
+                if (valid) {
+
+                    createSummary();
+
+                    showStep(3);
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       PREVIOUS STEP 3
+       ========================================================= */
+
+    if (prevStep3) {
+
+        prevStep3.type =
+            "button";
+
+
+        prevStep3.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                showStep(2);
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       NIK INPUT
+       ========================================================= */
+
+    const nikInput =
+        getElement("nik");
+
+
+    if (nikInput) {
+
+        nikInput.addEventListener(
+            "input",
+            function () {
+
+                this.value =
+                    this.value
+                        .replace(/\D/g, "")
+                        .slice(0, 16);
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       PHONE INPUT
+       ========================================================= */
+
+    const phoneInput =
+        getElement("phone");
+
+
+    if (phoneInput) {
+
+        phoneInput.addEventListener(
+            "input",
+            function () {
+
+                this.value =
+                    this.value
+                        .replace(/\D/g, "")
+                        .slice(0, 15);
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
        UPLOAD BUTTON
-    ========================================================= */
+       ========================================================= */
 
     getAll(".upload-button")
         .forEach(function (button) {
 
-            button.type = "button";
+            button.type =
+                "button";
+
 
             button.addEventListener(
                 "click",
@@ -446,11 +766,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     event.preventDefault();
                     event.stopPropagation();
 
+
                     const target =
                         button.dataset.target;
 
+
                     const input =
                         getElement(target);
+
 
                     if (input) {
 
@@ -466,13 +789,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* =========================================================
        FILE UPLOAD
-    ========================================================= */
+       ========================================================= */
 
     uploadInputs.forEach(
         function (id) {
 
             const input =
                 getElement(id);
+
 
             if (!input) {
                 return;
@@ -486,12 +810,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     const file =
                         this.files[0];
 
+
                     if (!file) {
                         return;
                     }
 
 
-                    /* CEK GAMBAR */
+                    /* VALIDASI TIPE */
 
                     if (
                         !file.type.startsWith(
@@ -503,38 +828,47 @@ document.addEventListener("DOMContentLoaded", function () {
                             "File harus berupa gambar."
                         );
 
-                        this.value = "";
+                        this.value =
+                            "";
 
                         return;
 
                     }
 
 
-                    /* BATAS FILE */
+                    /* VALIDASI UKURAN */
 
                     if (
                         file.size >
-                        10 * 1024 * 1024
+                        MAX_FILE_SIZE
                     ) {
 
                         alert(
                             "Ukuran foto maksimal 10 MB."
                         );
 
-                        this.value = "";
+                        this.value =
+                            "";
 
                         return;
 
                     }
 
 
-                    createPreview(this);
+                    /* PREVIEW */
 
+                    createPreview(
+                        this
+                    );
+
+
+                    /* HILANGKAN ERROR */
 
                     const error =
                         getElement(
                             id + "Error"
                         );
+
 
                     if (error) {
 
@@ -551,13 +885,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       PREVIEW
-    ========================================================= */
+       PREVIEW FOTO
+       ========================================================= */
 
     function createPreview(input) {
 
         const file =
             input.files[0];
+
 
         if (!file) {
             return;
@@ -569,6 +904,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ".upload-card"
             );
 
+
         if (!uploadCard) {
             return;
         }
@@ -578,6 +914,7 @@ document.addEventListener("DOMContentLoaded", function () {
             uploadCard.querySelector(
                 ".preview"
             );
+
 
         if (!preview) {
             return;
@@ -604,6 +941,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 image.src =
                     event.target.result;
 
+
                 image.alt =
                     "Preview foto";
 
@@ -615,14 +953,183 @@ document.addEventListener("DOMContentLoaded", function () {
             };
 
 
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(
+            file
+        );
 
     }
 
 
     /* =========================================================
-       SUMMARY
-    ========================================================= */
+       COMPRESS FOTO
+       ========================================================= */
+
+    function compressImage(file) {
+
+        return new Promise(
+            function (resolve, reject) {
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function (event) {
+
+                        const image =
+                            new Image();
+
+
+                        image.onload =
+                            function () {
+
+                                let width =
+                                    image.width;
+
+
+                                let height =
+                                    image.height;
+
+
+                                /* =====================
+                                   RESIZE PROPORSIONAL
+                                ===================== */
+
+                                if (
+                                    width >
+                                    MAX_IMAGE_SIZE ||
+                                    height >
+                                    MAX_IMAGE_SIZE
+                                ) {
+
+                                    if (
+                                        width >
+                                        height
+                                    ) {
+
+                                        height =
+                                            Math.round(
+                                                height *
+                                                MAX_IMAGE_SIZE /
+                                                width
+                                            );
+
+                                        width =
+                                            MAX_IMAGE_SIZE;
+
+                                    }
+
+                                    else {
+
+                                        width =
+                                            Math.round(
+                                                width *
+                                                MAX_IMAGE_SIZE /
+                                                height
+                                            );
+
+                                        height =
+                                            MAX_IMAGE_SIZE;
+
+                                    }
+
+                                }
+
+
+                                /* =====================
+                                   CANVAS
+                                ===================== */
+
+                                const canvas =
+                                    document.createElement(
+                                        "canvas"
+                                    );
+
+
+                                canvas.width =
+                                    width;
+
+
+                                canvas.height =
+                                    height;
+
+
+                                const context =
+                                    canvas.getContext(
+                                        "2d"
+                                    );
+
+
+                                context.drawImage(
+                                    image,
+                                    0,
+                                    0,
+                                    width,
+                                    height
+                                );
+
+
+                                /* =====================
+                                   JPEG COMPRESS
+                                ===================== */
+
+                                const compressed =
+                                    canvas.toDataURL(
+                                        "image/jpeg",
+                                        JPEG_QUALITY
+                                    );
+
+
+                                resolve(
+                                    compressed
+                                );
+
+                            };
+
+
+                        image.onerror =
+                            function () {
+
+                                reject(
+                                    new Error(
+                                        "Foto tidak dapat diproses."
+                                    )
+                                );
+
+                            };
+
+
+                        image.src =
+                            event.target.result;
+
+                    };
+
+
+                reader.onerror =
+                    function () {
+
+                        reject(
+                            new Error(
+                                "Foto gagal dibaca."
+                            )
+                        );
+
+                    };
+
+
+                reader.readAsDataURL(
+                    file
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       CREATE SUMMARY
+       ========================================================= */
 
     function createSummary() {
 
@@ -650,7 +1157,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             {
                 input: "kabupaten",
-                summary: "summaryKabupaten"
+                summary:
+                    "summaryKabupaten"
             }
 
         ];
@@ -663,6 +1171,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     getElement(
                         item.input
                     );
+
 
                 const summary =
                     getElement(
@@ -685,12 +1194,15 @@ document.addEventListener("DOMContentLoaded", function () {
                                 input.selectedIndex
                             ];
 
+
                         summary.textContent =
                             selected
                                 ? selected.text
                                 : "-";
 
-                    } else {
+                    }
+
+                    else {
 
                         summary.textContent =
                             input.value.trim()
@@ -703,6 +1215,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         );
 
+
+        /* =====================================================
+           SUMMARY DOKUMEN
+        ===================================================== */
 
         const summaryDocuments =
             getElement(
@@ -718,53 +1234,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 "";
 
 
-            const documents = [
-
-                {
-                    id: "selfie",
-                    name: "Foto Selfie"
-                },
-
-                {
-                    id: "accountProof",
-                    name: "Bukti Kepemilikan Akun"
-                },
-
-                {
-                    id: "newAccount",
-                    name: "Akun Baru Dibuat"
-                },
-
-                {
-                    id: "qrisProof",
-                    name: "Transaksi QRIS Rp1"
-                },
-
-                {
-                    id: "qrisEducation",
-                    name: "Edukasi QRIS"
-                },
-
-                {
-                    id: "postTest",
-                    name: "Pengerjaan Post Test"
-                },
-
-                {
-                    id: "postTestProof",
-                    name: "Selesai Pengerjaan Post Test"
-                }
-
-            ];
-
-
-            documents.forEach(
-                function (documentItem) {
+            uploadInputs.forEach(
+                function (id) {
 
                     const input =
-                        getElement(
-                            documentItem.id
-                        );
+                        getElement(id);
 
 
                     const item =
@@ -777,21 +1251,25 @@ document.addEventListener("DOMContentLoaded", function () {
                         "document-item";
 
 
+                    const fileName =
+                        input &&
+                        input.files &&
+                        input.files.length > 0
+                            ? input.files[0].name
+                            : "Terunggah";
+
+
                     item.textContent =
                         "✓ " +
-                        documentItem.name +
+                        documentNames[id] +
                         " — " +
-                        (
-                            input &&
-                            input.files.length > 0
-                                ? input.files[0].name
-                                : "Terunggah"
+                        fileName;
+
+
+                    summaryDocuments
+                        .appendChild(
+                            item
                         );
-
-
-                    summaryDocuments.appendChild(
-                        item
-                    );
 
                 }
             );
@@ -802,85 +1280,75 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       FILE → BASE64
-    ========================================================= */
+       KUMPULKAN DAN KOMPRES 7 FOTO
+       ========================================================= */
 
-    function fileToBase64(file) {
-
-        return new Promise(
-            function (resolve, reject) {
-
-                const reader =
-                    new FileReader();
-
-
-                reader.onload =
-                    function () {
-
-                        resolve(
-                            reader.result
-                        );
-
-                    };
-
-
-                reader.onerror =
-                    function () {
-
-                        reject(
-                            new Error(
-                                "Gagal membaca file."
-                            )
-                        );
-
-                    };
-
-
-                reader.readAsDataURL(
-                    file
-                );
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       AMBIL SEMUA FOTO
-    ========================================================= */
-
-    async function collectImages() {
+    async function collectCompressedImages() {
 
         const images = {};
 
 
         for (
-            const id of uploadInputs
+            let i = 0;
+            i < uploadInputs.length;
+            i++
         ) {
+
+            const id =
+                uploadInputs[i];
+
 
             const input =
                 getElement(id);
 
+
             if (
                 !input ||
                 !input.files ||
-                input.files.length === 0
+                !input.files[0]
             ) {
 
                 throw new Error(
                     "Foto " +
-                    id +
-                    " belum diunggah."
+                    documentNames[id] +
+                    " belum dipilih."
                 );
 
             }
 
 
-            images[id] =
-                await fileToBase64(
+            /* UPDATE STATUS */
+
+            updateSubmitStatus(
+                "Memproses foto " +
+                (i + 1) +
+                " dari " +
+                uploadInputs.length +
+                "..."
+            );
+
+
+            /* COMPRESS */
+
+            const compressed =
+                await compressImage(
                     input.files[0]
                 );
+
+
+            images[id] =
+                compressed;
+
+
+            /* UPDATE STATUS */
+
+            updateSubmitStatus(
+                "Foto " +
+                (i + 1) +
+                " dari " +
+                uploadInputs.length +
+                " siap."
+            );
 
         }
 
@@ -891,181 +1359,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       NEXT STEP 1
-    ========================================================= */
+       UPDATE STATUS TOMBOL
+       ========================================================= */
 
-    if (startButton) {
+    function updateSubmitStatus(
+        message
+    ) {
 
-        startButton.type =
-            "button";
+        if (submitButton) {
 
-        startButton.addEventListener(
-            "click",
-            function (event) {
+            submitButton.textContent =
+                message;
 
-                event.preventDefault();
-
-                showStep(1);
-
-            }
-        );
-
-    }
-
-
-    if (nextStep1) {
-
-        nextStep1.type =
-            "button";
-
-        nextStep1.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                if (
-                    validatePersonalData()
-                ) {
-
-                    showStep(2);
-
-                }
-
-            }
-        );
+        }
 
     }
 
 
     /* =========================================================
-       PREVIOUS STEP 2
-    ========================================================= */
-
-    if (prevStep2) {
-
-        prevStep2.type =
-            "button";
-
-        prevStep2.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                showStep(1);
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       NEXT STEP 2
-    ========================================================= */
-
-    if (nextStep2) {
-
-        nextStep2.type =
-            "button";
-
-        nextStep2.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                if (
-                    validateUploads()
-                ) {
-
-                    createSummary();
-
-                    showStep(3);
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       PREVIOUS STEP 3
-    ========================================================= */
-
-    if (prevStep3) {
-
-        prevStep3.type =
-            "button";
-
-        prevStep3.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                showStep(2);
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       NIK
-    ========================================================= */
-
-    const nikInput =
-        getElement("nik");
-
-    if (nikInput) {
-
-        nikInput.addEventListener(
-            "input",
-            function () {
-
-                this.value =
-                    this.value
-                        .replace(/\D/g, "")
-                        .slice(0, 16);
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       PHONE
-    ========================================================= */
-
-    const phoneInput =
-        getElement("phone");
-
-    if (phoneInput) {
-
-        phoneInput.addEventListener(
-            "input",
-            function () {
-
-                this.value =
-                    this.value
-                        .replace(/\D/g, "")
-                        .slice(0, 15);
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       SUBMIT KE GOOGLE APPS SCRIPT
-    ========================================================= */
+       SUBMIT FORM
+       ========================================================= */
 
     if (participantForm) {
 
@@ -1076,6 +1389,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 event.preventDefault();
 
 
+                /* =================================================
+                   PASTIKAN STEP 3
+                ================================================= */
+
                 if (
                     currentStep !== 3
                 ) {
@@ -1085,7 +1402,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                /* CEK PERSETUJUAN */
+                /* =================================================
+                   CEK PERSETUJUAN
+                ================================================= */
 
                 if (
                     agreement &&
@@ -1105,66 +1424,129 @@ document.addEventListener("DOMContentLoaded", function () {
                 clearErrors();
 
 
+                /* =================================================
+                   CEK API URL
+                ================================================= */
+
+                if (
+                    !API_URL ||
+                    API_URL.includes(
+                        "MASUKKAN_URL"
+                    )
+                ) {
+
+                    alert(
+                        "URL Google Apps Script belum dimasukkan ke script.js."
+                    );
+
+                    return;
+
+                }
+
+
+                /* =================================================
+                   DISABLE BUTTON
+                ================================================= */
+
                 if (submitButton) {
 
                     submitButton.disabled =
                         true;
 
                     submitButton.textContent =
-                        "Mengirim data...";
+                        "Menyiapkan data...";
 
                 }
 
 
                 try {
 
-                    /* AMBIL DATA */
+                    /* =============================================
+                       AMBIL DATA PESERTA
+                    ============================================= */
 
                     const nama =
                         getElement(
                             "nama"
-                        )?.value.trim() || "";
+                        ).value.trim();
+
 
                     const nik =
                         getElement(
                             "nik"
-                        )?.value.trim() || "";
+                        ).value.trim();
+
 
                     const phone =
                         getElement(
                             "phone"
-                        )?.value.trim() || "";
+                        ).value.trim();
+
 
                     const email =
                         getElement(
                             "email"
-                        )?.value.trim() || "";
+                        ).value.trim();
+
 
                     const kabupaten =
                         getElement(
                             "kabupaten"
-                        )?.value || "";
+                        ).value;
 
 
-                    /* AMBIL 7 FOTO */
+                    /* =============================================
+                       KOMPRES 7 FOTO
+                    ============================================= */
 
                     const images =
-                        await collectImages();
+                        await collectCompressedImages();
 
 
-                    /* DATA YANG DIKIRIM */
+                    /* =============================================
+                       NOMOR REFERENSI SEMENTARA
+                    ============================================= */
+
+                    const reference =
+                        generateReferenceNumber();
+
+
+                    const referenceElement =
+                        getElement(
+                            "referenceNumber"
+                        );
+
+
+                    if (
+                        referenceElement
+                    ) {
+
+                        referenceElement.textContent =
+                            reference;
+
+                    }
+
+
+                    /* =============================================
+                       PAYLOAD
+                    ============================================= */
 
                     const payload = {
 
-                        name: nama,
+                        name:
+                            nama,
 
-                        nik: nik,
+                        nik:
+                            nik,
 
-                        phone: phone,
+                        phone:
+                            phone,
 
-                        email: email,
+                        email:
+                            email,
 
-                        regency: kabupaten,
+                        regency:
+                            kabupaten,
 
                         selfie:
                             images.selfie,
@@ -1190,14 +1572,23 @@ document.addEventListener("DOMContentLoaded", function () {
                     };
 
 
-                    /* KIRIM KE APPS SCRIPT */
+                    /* =============================================
+                       KIRIM KE APPS SCRIPT
+                    ============================================= */
+
+                    updateSubmitStatus(
+                        "Mengirim data..."
+                    );
+
 
                     await fetch(
                         API_URL,
                         {
-                            method: "POST",
+                            method:
+                                "POST",
 
-                            mode: "no-cors",
+                            mode:
+                                "no-cors",
 
                             headers: {
                                 "Content-Type":
@@ -1212,29 +1603,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
 
-                    /* NOMOR REFERENSI */
+                    /* =============================================
+                       BERHASIL DIKIRIM
+                       
+                       no-cors membuat browser tidak dapat
+                       membaca response Apps Script.
+                    ============================================= */
 
-                    const reference =
-                        generateReferenceNumber();
-
-
-                    const referenceElement =
-                        getElement(
-                            "referenceNumber"
-                        );
-
-
-                    if (
-                        referenceElement
-                    ) {
-
-                        referenceElement.textContent =
-                            reference;
-
-                    }
+                    updateSubmitStatus(
+                        "Data terkirim..."
+                    );
 
 
-                    /* SEMBUNYIKAN FORM */
+                    await delay(
+                        800
+                    );
+
+
+                    /* =============================================
+                       TAMPILKAN SUCCESS
+                    ============================================= */
 
                     if (
                         participantForm
@@ -1260,8 +1648,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    /* TAMPILKAN SUCCESS */
-
                     const successSection =
                         getElement(
                             "successSection"
@@ -1275,9 +1661,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         successSection.style.display =
                             "block";
 
+
                         successSection.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start"
+                            behavior:
+                                "smooth",
+
+                            block:
+                                "start"
                         });
 
                     }
@@ -1286,15 +1676,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 } catch (error) {
 
                     console.error(
+                        "ERROR:",
                         error
                     );
 
 
                     alert(
-                        "Data gagal dikirim. Silakan coba lagi."
+                        "Data gagal dikirim.\n\n" +
+                        error.message
                     );
 
-                } finally {
 
                     if (submitButton) {
 
@@ -1315,8 +1706,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       GENERATE REFERENCE
-    ========================================================= */
+       DELAY
+       ========================================================= */
+
+    function delay(
+        milliseconds
+    ) {
+
+        return new Promise(
+            function (resolve) {
+
+                setTimeout(
+                    resolve,
+                    milliseconds
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       NOMOR REFERENSI
+       ========================================================= */
 
     function generateReferenceNumber() {
 
@@ -1331,13 +1744,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const month =
             String(
                 date.getMonth() + 1
-            ).padStart(2, "0");
+            ).padStart(
+                2,
+                "0"
+            );
 
 
         const day =
             String(
                 date.getDate()
-            ).padStart(2, "0");
+            ).padStart(
+                2,
+                "0"
+            );
 
 
         const random =
@@ -1360,8 +1779,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       NEW PARTICIPANT
-    ========================================================= */
+       PESERTA BARU
+       ========================================================= */
 
     if (newParticipant) {
 
@@ -1376,6 +1795,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 event.preventDefault();
 
 
+                /* RESET FORM */
+
                 if (
                     participantForm
                 ) {
@@ -1385,14 +1806,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
+                /* RESET ERROR */
+
                 clearErrors();
 
+
+                /* RESET PREVIEW */
 
                 uploadInputs.forEach(
                     function (id) {
 
                         const input =
                             getElement(id);
+
 
                         if (input) {
 
@@ -1425,6 +1851,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
 
+                /* RESET SUCCESS */
+
+                const successSection =
+                    getElement(
+                        "successSection"
+                    );
+
+
+                if (
+                    successSection
+                ) {
+
+                    successSection.style.display =
+                        "none";
+
+                }
+
+
+                /* TAMPILKAN FORM */
+
                 if (
                     participantForm
                 ) {
@@ -1449,23 +1895,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                const successSection =
-                    getElement(
-                        "successSection"
-                    );
-
-
-                if (
-                    successSection
-                ) {
-
-                    successSection.style.display =
-                        "none";
-
-                }
-
+                /* STEP 1 */
 
                 showStep(1);
+
+
+                /* SCROLL */
+
+                if (
+                    formSection
+                ) {
+
+                    formSection.scrollIntoView({
+                        behavior:
+                            "smooth",
+
+                        block:
+                            "start"
+                    });
+
+                }
 
             }
         );
@@ -1475,7 +1924,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* =========================================================
        AGREEMENT
-    ========================================================= */
+       ========================================================= */
 
     if (agreement) {
 
@@ -1502,13 +1951,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* =========================================================
        INITIAL
-    ========================================================= */
+       ========================================================= */
 
     showStep(1);
 
 
     console.log(
-        "Petualangan Sanak Digital berhasil dijalankan."
+        "Sanak Digital JS berhasil dijalankan."
     );
+
 
 });
