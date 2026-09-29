@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Formulir Petualangan Sanak Digital - Bank Indonesia Provinsi Riau"
+    >
+
+    <title>
+        Petualangan Sanak Digital | Bank Indonesia Provinsi Riau
+    </title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="header">
+
+        <div class="container header-content">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    SD
+                </div>
+
+                <div>
+                    <h1>
+                        Sanak Digital
+                    </h1>
+
+                    <p>
+                        Petualangan Sanak Digital
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="institution">
+
+                Bank Indonesia Provinsi Riau
+
+                <span>
+                    Petualangan Sanak Digital
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="hero">
+
+        <div class="container hero-content">
+
+            <div class="hero-text">
+
+                <span class="badge">
+                    PETUALANGAN SANAK DIGITAL
+                </span>
+
+                <h2>
+                    Lengkapi Data,
+                    <span>Ikuti Petualangan.</span>
+                </h2>
+
+                <p>
+                    Silakan lengkapi data diri dan dokumentasi
+                    yang diperlukan untuk mengikuti kegiatan
+                    Petualangan Sanak Digital.
+                </p>
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="startButton"
+                >
+                    Mulai Sekarang
+                </button>
+
+            </div>
+
+
+            <div class="hero-card">
+
+                <div class="hero-icon">
+                    SD
+                </div>
+
+                <h3>
+                    Data Aman & Terjaga
+                </h3>
+
+                <p>
+                    Data yang Anda berikan digunakan untuk
+                    keperluan administrasi kegiatan
+                    Petualangan Sanak Digital.
+                </p>
+
+                <div class="hero-line"></div>
+
+                <small>
+                    Bank Indonesia Provinsi Riau
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FORM SECTION
+         ===================================================== -->
+
+    <main
+        class="form-section"
+        id="formSection"
+    >
+
+        <div class="container">
+
+
+            <!-- =================================================
+                 STEPPER
+                 ================================================= -->
+
+            <div class="stepper">
+
+                <div class="step active">
+
+                    <div class="step-number">
+                        1
+                    </div>
+
+                    <div>
+                        <strong>
+                            Data Diri
+                        </strong>
+
+                        <small>
+                            Informasi peserta
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="step-line"></div>
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        2
+                    </div>
+
+                    <div>
+                        <strong>
+                            Dokumentasi
+                        </strong>
+
+                        <small>
+                            Upload bukti
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="step-line"></div>
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        3
+                    </div>
+
+                    <div>
+                        <strong>
+                            Konfirmasi
+                        </strong>
+
+                        <small>
+                            Periksa data
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FORM
+                 ================================================= -->
+
+            <form
+                id="participantForm"
+                novalidate
+            >
+
+
+                <!-- =============================================
+                     STEP 1 - DATA DIRI
+                     ============================================= -->
+
+                <section
+                    class="form-step active"
+                    id="step1"
+                >
+
+                    <div class="form-card">
+
+                        <div class="section-title">
+
+                            <div class="section-icon">
+                                01
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Data Diri Peserta
+                                </h2>
+
+                                <p>
+                                    Masukkan data sesuai dengan identitas Anda.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            <!-- NAMA -->
+
+                            <div class="form-group full">
+
+                                <label for="nama">
+                                    Nama Sesuai KTP
+                                    <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="nama"
+                                    name="nama"
+                                    placeholder="Masukkan nama sesuai KTP"
+                                    autocomplete="name"
+                                >
+
+                                <small
+                                    class="error"
+                                    id="namaError"
+                                ></small>
+
+                            </div>
+
+
+                            <!-- NIK -->
+
+                            <div class="form-group">
+
+                                <label for="nik">
+                                    NIK
+                                    <span>*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="nik"
+                                    name="nik"
+                                    placeholder="16 digit NIK"
+                                    inputmode="numeric"
+                                    maxlength="16"
+                                    autocomplete="off"
+                                >
+
+                                <small class="helper">
+                                    Masukkan 16 digit Nomor Induk Kependudukan.
+                                </small>
+
+                                <small
+                                    class="error"
+                                    id="nikError"
+                                ></small>
+
+                            </div>
+
+
+                            <!-- NO HP -->
+
+                            <div class="form-group">
+
+                                <label for="phone">
+                                    Nomor HP
+                                    <span>*</span>
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="08xxxxxxxxxx"
+                                    inputmode="numeric"
+                                    maxlength="15"
+                                    autocomplete="tel"
+                                >
+
+                                <small
+                                    class="error"
+                                    id="phoneError"
+                                ></small>
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+
+                            <div class="form-group">
+
+                                <label for="email">
+                                    Email
+                                    <span>*</span>
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="nama@email.com"
+                                    autocomplete="email"
+                                >
+
+                                <small
+                                    class="error"
+                                    id="emailError"
+                                ></small>
+
+                            </div>
+
+
+                            <!-- KABUPATEN -->
+
+                            <div class="form-group">
+
+                                <label for="kabupaten">
+                                    Asal Kabupaten/Kota
+                                    <span>*</span>
+                                </label>
+
+                                <select
+                                    id="kabupaten"
+                                    name="kabupaten"
+                                >
+
+                                    <option value="">
+                                        Pilih Kabupaten/Kota
+                                    </option>
+
+                                    <option value="Pekanbaru">
+                                        Kota Pekanbaru
+                                    </option>
+
+                                    <option value="Dumai">
+                                        Kota Dumai
+                                    </option>
+
+                                    <option value="Bengkalis">
+                                        Kabupaten Bengkalis
+                                    </option>
+
+                                    <option value="Indragiri Hilir">
+                                        Kabupaten Indragiri Hilir
+                                    </option>
+
+                                    <option value="Indragiri Hulu">
+                                        Kabupaten Indragiri Hulu
+                                    </option>
+
+                                    <option value="Kampar">
+                                        Kabupaten Kampar
+                                    </option>
+
+                                    <option value="Kepulauan Meranti">
+                                        Kabupaten Kepulauan Meranti
+                                    </option>
+
+                                    <option value="Kuantan Singingi">
+                                        Kabupaten Kuantan Singingi
+                                    </option>
+
+                                    <option value="Pelalawan">
+                                        Kabupaten Pelalawan
+                                    </option>
+
+                                    <option value="Rokan Hilir">
+                                        Kabupaten Rokan Hilir
+                                    </option>
+
+                                    <option value="Rokan Hulu">
+                                        Kabupaten Rokan Hulu
+                                    </option>
+
+                                    <option value="Siak">
+                                        Kabupaten Siak
+                                    </option>
+
+                                </select>
+
+                                <small
+                                    class="error"
+                                    id="kabupatenError"
+                                ></small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-navigation right">
+
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                id="nextStep1"
+                            >
+                                Lanjut
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =============================================
+                     STEP 2 - DOKUMENTASI
+                     ============================================= -->
+
+                <section
+                    class="form-step"
+                    id="step2"
+                >
+
+                    <div class="form-card">
+
+                        <div class="section-title">
+
+                            <div class="section-icon">
+                                02
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Dokumentasi Kegiatan
+                                </h2>
+
+                                <p>
+                                    Upload seluruh dokumentasi yang diperlukan.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="upload-grid">
+
+
+                            <!-- =================================
+                                 1. FOTO SELFIE
+                                 ================================= -->
+
+                            <div class="upload-card">
+
+                                <div class="upload-icon">
+                                    🤳
+                                </div>
+
+                                <h3>
+                                    Foto Selfie
+                                </h3>
+
+                                <p>
+                                    Upload foto selfie peserta
+                                    dengan jelas.
+                                </p>
+
+                                <input
+                                    type="file"
+                                    id="selfie"
+                                    name="selfie"
+                                    accept="image/*"
+                                    hidden
+                                >
+
+                                <button
+                                    type="button"
+                                    class="upload-button"
+                                    data-target="selfie"
+                                >
+                                    Pilih Foto
+                                </button>
+
+                                <div
+                                    class="preview"
+                                    id="selfiePreview"
+                                ></div>
+
+                                <small
+                                    class="error"
+                                    id="selfieError"
+                                ></small>
+
+                            </div>
+
+
+
+                            <!-- =================================
+                                 2. BUKTI KEPEMILIKAN AKUN
+                                 ================================= -->
+
+                            <div class="upload-card">
+
+                                <div class="upload-icon">
+                                    📱
+                                </div>
+
+                                <h3>
+                                    Bukti Kepemilikan Akun
+                                </h3>
+
+                                <p>
+                                    Upload foto bukti kepemilikan
+                                    akun E-Wallet/M-Banking baru.
+                                </p>
+
+                                <input
+                                    type="file"
+                                    id="accountProof"
+                                    name="accountProof"
+                                    accept="image/*"
+                                    hidden
+                                >
+
+                                <button
+                                    type="button"
+                                    class="upload-button"
+                                    data-target="accountProof"
+                                >
+                                    Pilih Foto
+                                </button>
+
+                                <div
+                                    class="preview"
+                                    id="accountProofPreview"
+                                ></div>
+
+                                <small
+                                    class="error"
+                                    id="accountProofError"
+                                ></small>
+
+                            </div>
+
+
+
+                            <!-- =================================
+                                 3. BUKTI AKUN BARU
+                                 ================================= -->
+
+                            <div class="upload-card">
+
+                                <div class="upload-icon">
+                                    🆕
+                                </div>
+
+                                <h3>
+                                    Bukti Akun Baru Dibuat
+                                </h3>
+
+                                <p>
+                                    Upload foto yang menunjukkan
+                                    akun E-Wallet/M-Banking baru
+                                    telah dibuat.
+                                </p>
+
+                                <input
+                                    type="file"
+                                    id="newAccount"
+                                    name="newAccount"
+                                    accept="image/*"
+                                    hidden
+                                >
+
+                                <button
+                                    type="button"
+                                    class="upload-button"
+                                    data-target="newAccount"
+                                >
+                                    Pilih Foto
+                                </button>
+
+                                <div
+                                    class="preview"
+                                    id="newAccountPreview"
+                                ></div>
+
+                                <small
+                                    class="error"
+                                    id="newAccountError"
+                                ></small>
+
+                            </div>
+
+
+
+                            <!-- =================================
+                                 4. TRANSAKSI QRIS RP1
+                                 ================================= -->
+
+                            <div class="upload-card">
+
+                                <div class="upload-icon">
+                                    💳
+                                </div>
+
+                                <h3>
+                                    Bukti Transaksi QRIS Rp1
+                                </h3>
+
+                                <p>
+                                    Upload bukti transaksi
+                                    QRIS sebesar Rp1.
+                                </p>
+
+                                <input
+                                    type="file"
+                                    id="qrisProof"
+                                    name="qrisProof"
+                                    accept="image/*"
+                                    hidden
+                                >
+
+                                <button
+                                    type="button"
+                                    class="upload-button"
+                                    data-target="qrisProof"
+                                >
+                                    Pilih Foto
+                                </button>
+
+                                <div
+                                    class="preview"
+                                    id="qrisProofPreview"
+                                ></div>
+
+                                <small
+                                    class="error"
+                                    id="qrisProofError"
+                                ></small>
+
+                            </div>
+
+
+
+                            <!-- =================================
+                                 5. EDUKASI QRIS
+                                 ================================= -->
+
+                            <div class="upload-card">
+
+                                <div class="upload-icon">
+                                    📚
+                                </div>
+
+                                <h3>
+                                    Edukasi QRIS
+                                </h3>
+
+                                <p>
+                                    Upload foto atau bukti bahwa
+                                    peserta telah mengikuti edukasi QRIS.
+                                </p>
+
+                                <input
+                                    type="file"
+                                    id="qrisEducation"
+                                    name="qrisEducation"
+                                    accept="image/*"
+                                    hidden
+                                >
+
+                                <button
+                                    type="button"
+                                    class="upload-button"
+                                    data-target="qrisEducation"
+                                >
+                                    Pilih Foto
+                                </button>
+
+                                <div
+                                    class="preview"
+                                    id="qrisEducationPreview"
+                                ></div>
+
+                                <small
+                                    class="error"
+                                    id="qrisEducationError"
+                                ></small>
+
+                            </div>
+
+
+
+                            <!-- =================================
+                                 6. PENGERJAAN POST TEST
+                                 ================================= -->
+
+                            <div class="upload-card">
+
+                                <div class="upload-icon">
+                                    📝
+                                </div>
+
+                                <h3>
+                                    Pengerjaan Post Test
+                                </h3>
+
+                                <p>
+                                    Upload foto atau screenshot
+                                    bukti pengerjaan post test.
+                                </p>
+
+                                <input
+                                    type="file"
+                                    id="postTest"
+                                    name="postTest"
+                                    accept="image/*"
+                                    hidden
+                                >
+
+                                <button
+                                    type="button"
+                                    class="upload-button"
+                                    data-target="postTest"
+                                >
+                                    Pilih Foto
+                                </button>
+
+                                <div
+                                    class="preview"
+                                    id="postTestPreview"
+                                ></div>
+
+                                <small
+                                    class="error"
+                                    id="postTestError"
+                                ></small>
+
+                            </div>
+
+
+
+                            <!-- =================================
+                                 7. SELESAI POST TEST
+                                 ================================= -->
+
+                            <div class="upload-card">
+
+                                <div class="upload-icon">
+                                    ✅
+                                </div>
+
+                                <h3>
+                                    Selesai Pengerjaan Post Test
+                                </h3>
+
+                                <p>
+                                    Upload foto yang menunjukkan
+                                    peserta telah selesai mengerjakan
+                                    post test.
+                                </p>
+
+                                <input
+                                    type="file"
+                                    id="postTestProof"
+                                    name="postTestProof"
+                                    accept="image/*"
+                                    hidden
+                                >
+
+                                <button
+                                    type="button"
+                                    class="upload-button"
+                                    data-target="postTestProof"
+                                >
+                                    Pilih Foto
+                                </button>
+
+                                <div
+                                    class="preview"
+                                    id="postTestProofPreview"
+                                ></div>
+
+                                <small
+                                    class="error"
+                                    id="postTestProofError"
+                                ></small>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NAVIGATION -->
+
+                        <div class="form-navigation">
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                id="prevStep2"
+                            >
+                                Kembali
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                id="nextStep2"
+                            >
+                                Lanjut
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =============================================
+                     STEP 3 - KONFIRMASI
+                     ============================================= -->
+
+                <section
+                    class="form-step"
+                    id="step3"
+                >
+
+                    <div class="form-card">
+
+                        <div class="section-title">
+
+                            <div class="section-icon">
+                                03
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Konfirmasi Data
+                                </h2>
+
+                                <p>
+                                    Pastikan seluruh data yang Anda masukkan sudah benar.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- DATA PESERTA -->
+
+                        <div class="summary">
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Nama Sesuai KTP
+                                </span>
+
+                                <strong id="summaryNama">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    NIK
+                                </span>
+
+                                <strong id="summaryNik">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Nomor HP
+                                </span>
+
+                                <strong id="summaryPhone">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Email
+                                </span>
+
+                                <strong id="summaryEmail">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Kabupaten/Kota
+                                </span>
+
+                                <strong id="summaryKabupaten">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- DOKUMEN -->
+
+                        <div class="document-status">
+
+                            <h3>
+                                Dokumentasi yang Diunggah
+                            </h3>
+
+                            <div id="summaryDocuments">
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- AGREEMENT -->
+
+                        <label
+                            class="agreement"
+                            for="agreement"
+                        >
+
+                            <input
+                                type="checkbox"
+                                id="agreement"
+                                name="agreement"
+                            >
+
+                            <span>
+                                Saya menyatakan bahwa data yang
+                                saya masukkan adalah benar dan
+                                bersedia mengikuti ketentuan
+                                kegiatan Petualangan Sanak Digital.
+                            </span>
+
+                        </label>
+
+                        <small
+                            class="error"
+                            id="agreementError"
+                        ></small>
+
+
+
+                        <!-- NAVIGATION -->
+
+                        <div class="form-navigation">
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                id="prevStep3"
+                            >
+                                Kembali
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                id="submitButton"
+                            >
+                                Kirim Data
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </form>
+
+
+
+            <!-- =================================================
+                 SUCCESS
+                 ================================================= -->
+
+            <section
+                class="success-section"
+                id="successSection"
+            >
+
+                <div class="success-card">
+
+                    <div class="success-icon">
+                        ✓
+                    </div>
+
+                    <h2>
+                        Data Berhasil Dikirim
+                    </h2>
+
+                    <p>
+                        Terima kasih telah mengikuti
+                        Petualangan Sanak Digital.
+                        Data Anda telah berhasil diproses.
+                    </p>
+
+
+                    <div class="reference-box">
+
+                        <span>
+                            Nomor Referensi
+                        </span>
+
+                        <strong id="referenceNumber">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="newParticipant"
+                    >
+                        Isi Data Peserta Baru
+                    </button>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            Petualangan Sanak Digital
+
+            <span>
+                Bank Indonesia Provinsi Riau
+            </span>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="script.js"></script>
+
+</body>
+</html>
