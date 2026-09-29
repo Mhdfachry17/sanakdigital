@@ -5,29 +5,41 @@ document.addEventListener("DOMContentLoaded", function () {
        SANAK DIGITAL
        PETUALANGAN SANAK DIGITAL
        BANK INDONESIA PROVINSI RIAU
+
+       SISTEM:
+       GitHub Pages
+            ↓
+       Google Apps Script
+            ↓
+       Google Drive + Google Sheets
        ========================================================= */
 
 
     /* =========================================================
-       GOOGLE APPS SCRIPT API
+       KONFIGURASI
        ========================================================= */
 
     const API_URL =
         "https://script.google.com/macros/s/AKfycbwjpw-iAGPVjeBgJFMX0QgSBwB4U7y68WmATkwB1hcnxPlFuNDJWNGMe2TSnq6omgyz/exec";
 
+    /*
+       Contoh:
 
-    /* =========================================================
-       PENGATURAN KOMPRESI FOTO
-       ========================================================= */
+       const API_URL =
+       "https://script.google.com/macros/s/XXXXXXXXXXXX/exec";
+    */
 
-    const MAX_FILE_SIZE =
-        10 * 1024 * 1024; // 10 MB
 
-    const MAX_IMAGE_SIZE =
-        1600; // maksimal lebar / tinggi
+    /*
+       Pengaturan kompresi foto.
 
-    const JPEG_QUALITY =
-        0.75; // kualitas 75%
+       1280 px cukup untuk dokumentasi.
+       Quality 0.60 membuat ukuran file jauh lebih kecil
+       dibanding foto asli kamera iPhone.
+    */
+
+    const MAX_IMAGE_SIZE = 1280;
+    const JPEG_QUALITY = 0.60;
 
 
     /* =========================================================
@@ -83,56 +95,74 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       7 FILE UPLOAD
+       DAFTAR 7 FOTO
        ========================================================= */
 
-    const uploadInputs = [
+    const uploadConfig = [
 
-        "selfie",
+        {
+            id: "selfie",
+            error: "selfieError",
+            field: "selfie",
+            label: "Foto Selfie",
+            message: "Foto selfie wajib diunggah."
+        },
 
-        "accountProof",
+        {
+            id: "accountProof",
+            error: "accountProofError",
+            field: "accountProof",
+            label: "Bukti Kepemilikan Akun",
+            message:
+                "Foto bukti kepemilikan akun wajib diunggah."
+        },
 
-        "newAccount",
+        {
+            id: "newAccount",
+            error: "newAccountError",
+            field: "newAccount",
+            label: "Akun Baru Dibuat",
+            message:
+                "Foto bukti akun baru dibuat wajib diunggah."
+        },
 
-        "qrisProof",
+        {
+            id: "qrisProof",
+            error: "qrisProofError",
+            field: "qrisProof",
+            label: "Transaksi QRIS Rp1",
+            message:
+                "Foto bukti transaksi QRIS Rp1 wajib diunggah."
+        },
 
-        "qrisEducation",
+        {
+            id: "qrisEducation",
+            error: "qrisEducationError",
+            field: "qrisEducation",
+            label: "Edukasi QRIS",
+            message:
+                "Foto edukasi QRIS wajib diunggah."
+        },
 
-        "postTest",
+        {
+            id: "postTest",
+            error: "postTestError",
+            field: "postTest",
+            label: "Pengerjaan Post Test",
+            message:
+                "Foto pengerjaan post test wajib diunggah."
+        },
 
-        "postTestProof"
+        {
+            id: "postTestProof",
+            error: "postTestProofError",
+            field: "postTestProof",
+            label: "Selesai Pengerjaan Post Test",
+            message:
+                "Foto selesai pengerjaan post test wajib diunggah."
+        }
 
     ];
-
-
-    /* =========================================================
-       NAMA DOKUMEN
-       ========================================================= */
-
-    const documentNames = {
-
-        selfie:
-            "Foto Selfie",
-
-        accountProof:
-            "Bukti Kepemilikan Akun",
-
-        newAccount:
-            "Akun Baru Dibuat",
-
-        qrisProof:
-            "Transaksi QRIS Rp1",
-
-        qrisEducation:
-            "Edukasi QRIS",
-
-        postTest:
-            "Pengerjaan Post Test",
-
-        postTestProof:
-            "Selesai Pengerjaan Post Test"
-
-    };
 
 
     /* =========================================================
@@ -141,52 +171,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function showStep(stepNumber) {
 
-        currentStep =
-            stepNumber;
-
+        currentStep = stepNumber;
 
         const steps =
             getAll(".form-step");
 
-
-        const indicators =
+        const stepIndicators =
             getAll(".step");
 
 
         steps.forEach(function (step) {
 
-            step.classList.remove(
-                "active"
-            );
+            step.classList.remove("active");
 
 
             if (
                 step.id ===
-                "step" + stepNumber ||
+                    "step" + stepNumber ||
 
                 step.dataset.step ===
-                String(stepNumber)
+                    String(stepNumber)
             ) {
 
-                step.classList.add(
-                    "active"
-                );
+                step.classList.add("active");
 
             }
 
         });
 
 
-        indicators.forEach(
+        stepIndicators.forEach(
             function (step, index) {
 
                 const number =
                     index + 1;
-
-
-                step.classList.remove(
-                    "active"
-                );
 
 
                 if (
@@ -195,6 +213,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 ) {
 
                     step.classList.add(
+                        "active"
+                    );
+
+                } else {
+
+                    step.classList.remove(
                         "active"
                     );
 
@@ -222,13 +246,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function clearErrors() {
 
-        getAll(".error")
-            .forEach(function (error) {
+        getAll(".error").forEach(
+            function (error) {
 
-                error.textContent =
-                    "";
+                error.textContent = "";
 
-            });
+            }
+        );
 
     }
 
@@ -245,7 +269,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const error =
             getElement(id);
 
-
         if (error) {
 
             error.textContent =
@@ -257,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       VALIDASI DATA PRIBADI
+       VALIDASI DATA DIRI
        ========================================================= */
 
     function validatePersonalData() {
@@ -267,9 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let valid = true;
 
 
-        /* =====================================================
-           NAMA
-        ===================================================== */
+        /* NAMA */
 
         const nama =
             getElement("nama");
@@ -290,9 +311,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* =====================================================
-           NIK
-        ===================================================== */
+        /* NIK */
 
         const nik =
             getElement("nik");
@@ -316,9 +335,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 valid = false;
 
-            }
-
-            else if (
+            } else if (
                 nikValue.length !== 16
             ) {
 
@@ -334,9 +351,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* =====================================================
-           NOMOR HP
-        ===================================================== */
+        /* NOMOR HP */
 
         const phone =
             getElement("phone");
@@ -360,11 +375,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 valid = false;
 
-            }
-
-            else if (
-                !/^08\d{8,13}$/
-                    .test(phoneValue)
+            } else if (
+                !/^08\d{8,13}$/.test(
+                    phoneValue
+                )
             ) {
 
                 showError(
@@ -379,9 +393,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* =====================================================
-           EMAIL
-        ===================================================== */
+        /* EMAIL */
 
         const email =
             getElement("email");
@@ -408,9 +420,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 valid = false;
 
-            }
-
-            else if (
+            } else if (
                 !emailPattern.test(
                     emailValue
                 )
@@ -428,9 +438,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /* =====================================================
-           KABUPATEN / KOTA
-        ===================================================== */
+        /* KABUPATEN / KOTA */
 
         const kabupaten =
             getElement("kabupaten");
@@ -467,67 +475,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let valid = true;
 
 
-        const uploads = [
-
-            {
-                id: "selfie",
-                error: "selfieError",
-                message:
-                    "Foto selfie wajib diunggah."
-            },
-
-            {
-                id: "accountProof",
-                error:
-                    "accountProofError",
-                message:
-                    "Foto bukti kepemilikan akun wajib diunggah."
-            },
-
-            {
-                id: "newAccount",
-                error:
-                    "newAccountError",
-                message:
-                    "Foto bukti akun baru wajib diunggah."
-            },
-
-            {
-                id: "qrisProof",
-                error:
-                    "qrisProofError",
-                message:
-                    "Foto bukti transaksi QRIS Rp1 wajib diunggah."
-            },
-
-            {
-                id: "qrisEducation",
-                error:
-                    "qrisEducationError",
-                message:
-                    "Foto edukasi QRIS wajib diunggah."
-            },
-
-            {
-                id: "postTest",
-                error:
-                    "postTestError",
-                message:
-                    "Foto pengerjaan post test wajib diunggah."
-            },
-
-            {
-                id: "postTestProof",
-                error:
-                    "postTestProofError",
-                message:
-                    "Foto selesai pengerjaan post test wajib diunggah."
-            }
-
-        ];
-
-
-        uploads.forEach(
+        uploadConfig.forEach(
             function (item) {
 
                 const input =
@@ -764,6 +712,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 function (event) {
 
                     event.preventDefault();
+
                     event.stopPropagation();
 
 
@@ -788,14 +737,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       FILE UPLOAD
+       FILE INPUT
        ========================================================= */
 
-    uploadInputs.forEach(
-        function (id) {
+    uploadConfig.forEach(
+        function (item) {
 
             const input =
-                getElement(id);
+                getElement(item.id);
 
 
             if (!input) {
@@ -816,7 +765,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    /* VALIDASI TIPE */
+                    /* CEK GAMBAR */
 
                     if (
                         !file.type.startsWith(
@@ -828,27 +777,25 @@ document.addEventListener("DOMContentLoaded", function () {
                             "File harus berupa gambar."
                         );
 
-                        this.value =
-                            "";
+                        this.value = "";
 
                         return;
 
                     }
 
 
-                    /* VALIDASI UKURAN */
+                    /* MAKSIMAL 10 MB */
 
                     if (
                         file.size >
-                        MAX_FILE_SIZE
+                        10 * 1024 * 1024
                     ) {
 
                         alert(
                             "Ukuran foto maksimal 10 MB."
                         );
 
-                        this.value =
-                            "";
+                        this.value = "";
 
                         return;
 
@@ -866,7 +813,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     const error =
                         getElement(
-                            id + "Error"
+                            item.error
                         );
 
 
@@ -885,7 +832,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       PREVIEW FOTO
+       CREATE PREVIEW
        ========================================================= */
 
     function createPreview(input) {
@@ -953,176 +900,7 @@ document.addEventListener("DOMContentLoaded", function () {
             };
 
 
-        reader.readAsDataURL(
-            file
-        );
-
-    }
-
-
-    /* =========================================================
-       COMPRESS FOTO
-       ========================================================= */
-
-    function compressImage(file) {
-
-        return new Promise(
-            function (resolve, reject) {
-
-                const reader =
-                    new FileReader();
-
-
-                reader.onload =
-                    function (event) {
-
-                        const image =
-                            new Image();
-
-
-                        image.onload =
-                            function () {
-
-                                let width =
-                                    image.width;
-
-
-                                let height =
-                                    image.height;
-
-
-                                /* =====================
-                                   RESIZE PROPORSIONAL
-                                ===================== */
-
-                                if (
-                                    width >
-                                    MAX_IMAGE_SIZE ||
-                                    height >
-                                    MAX_IMAGE_SIZE
-                                ) {
-
-                                    if (
-                                        width >
-                                        height
-                                    ) {
-
-                                        height =
-                                            Math.round(
-                                                height *
-                                                MAX_IMAGE_SIZE /
-                                                width
-                                            );
-
-                                        width =
-                                            MAX_IMAGE_SIZE;
-
-                                    }
-
-                                    else {
-
-                                        width =
-                                            Math.round(
-                                                width *
-                                                MAX_IMAGE_SIZE /
-                                                height
-                                            );
-
-                                        height =
-                                            MAX_IMAGE_SIZE;
-
-                                    }
-
-                                }
-
-
-                                /* =====================
-                                   CANVAS
-                                ===================== */
-
-                                const canvas =
-                                    document.createElement(
-                                        "canvas"
-                                    );
-
-
-                                canvas.width =
-                                    width;
-
-
-                                canvas.height =
-                                    height;
-
-
-                                const context =
-                                    canvas.getContext(
-                                        "2d"
-                                    );
-
-
-                                context.drawImage(
-                                    image,
-                                    0,
-                                    0,
-                                    width,
-                                    height
-                                );
-
-
-                                /* =====================
-                                   JPEG COMPRESS
-                                ===================== */
-
-                                const compressed =
-                                    canvas.toDataURL(
-                                        "image/jpeg",
-                                        JPEG_QUALITY
-                                    );
-
-
-                                resolve(
-                                    compressed
-                                );
-
-                            };
-
-
-                        image.onerror =
-                            function () {
-
-                                reject(
-                                    new Error(
-                                        "Foto tidak dapat diproses."
-                                    )
-                                );
-
-                            };
-
-
-                        image.src =
-                            event.target.result;
-
-                    };
-
-
-                reader.onerror =
-                    function () {
-
-                        reject(
-                            new Error(
-                                "Foto gagal dibaca."
-                            )
-                        );
-
-                    };
-
-
-                reader.readAsDataURL(
-                    file
-                );
-
-            }
-        );
+        reader.readAsDataURL(file);
 
     }
 
@@ -1157,8 +935,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             {
                 input: "kabupaten",
-                summary:
-                    "summaryKabupaten"
+                summary: "summaryKabupaten"
             }
 
         ];
@@ -1200,9 +977,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 ? selected.text
                                 : "-";
 
-                    }
-
-                    else {
+                    } else {
 
                         summary.textContent =
                             input.value.trim()
@@ -1216,9 +991,9 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            SUMMARY DOKUMEN
-        ===================================================== */
+           ----------------------------------------------------- */
 
         const summaryDocuments =
             getElement(
@@ -1234,42 +1009,51 @@ document.addEventListener("DOMContentLoaded", function () {
                 "";
 
 
-            uploadInputs.forEach(
-                function (id) {
+            uploadConfig.forEach(
+                function (item) {
 
                     const input =
-                        getElement(id);
+                        getElement(
+                            item.id
+                        );
 
 
-                    const item =
+                    const div =
                         document.createElement(
                             "div"
                         );
 
 
-                    item.className =
+                    div.className =
                         "document-item";
 
 
-                    const fileName =
+                    let fileName =
+                        "Terunggah";
+
+
+                    if (
                         input &&
                         input.files &&
                         input.files.length > 0
-                            ? input.files[0].name
-                            : "Terunggah";
+                    ) {
+
+                        fileName =
+                            input.files[0].name;
+
+                    }
 
 
-                    item.textContent =
+                    div.textContent =
                         "✓ " +
-                        documentNames[id] +
+                        item.label +
                         " — " +
                         fileName;
 
 
-                    summaryDocuments
-                        .appendChild(
-                            item
-                        );
+                    summaryDocuments.appendChild(
+                        div
+                    );
 
                 }
             );
@@ -1280,98 +1064,583 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       KUMPULKAN DAN KOMPRES 7 FOTO
+       GENERATE REFERENCE
        ========================================================= */
 
-    async function collectCompressedImages() {
+    function generateReferenceNumber() {
 
-        const images = {};
-
-
-        for (
-            let i = 0;
-            i < uploadInputs.length;
-            i++
-        ) {
-
-            const id =
-                uploadInputs[i];
+        const date =
+            new Date();
 
 
-            const input =
-                getElement(id);
+        const year =
+            date.getFullYear();
 
 
-            if (
-                !input ||
-                !input.files ||
-                !input.files[0]
-            ) {
-
-                throw new Error(
-                    "Foto " +
-                    documentNames[id] +
-                    " belum dipilih."
-                );
-
-            }
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(2, "0");
 
 
-            /* UPDATE STATUS */
+        const day =
+            String(
+                date.getDate()
+            ).padStart(2, "0");
 
-            updateSubmitStatus(
-                "Memproses foto " +
-                (i + 1) +
-                " dari " +
-                uploadInputs.length +
-                "..."
+
+        const hour =
+            String(
+                date.getHours()
+            ).padStart(2, "0");
+
+
+        const minute =
+            String(
+                date.getMinutes()
+            ).padStart(2, "0");
+
+
+        const second =
+            String(
+                date.getSeconds()
+            ).padStart(2, "0");
+
+
+        const random =
+            Math.floor(
+                100 + Math.random() * 900
             );
 
 
-            /* COMPRESS */
-
-            const compressed =
-                await compressImage(
-                    input.files[0]
-                );
-
-
-            images[id] =
-                compressed;
-
-
-            /* UPDATE STATUS */
-
-            updateSubmitStatus(
-                "Foto " +
-                (i + 1) +
-                " dari " +
-                uploadInputs.length +
-                " siap."
-            );
-
-        }
-
-
-        return images;
+        return (
+            "SD-" +
+            year +
+            month +
+            day +
+            "-" +
+            hour +
+            minute +
+            second +
+            "-" +
+            random
+        );
 
     }
 
 
     /* =========================================================
-       UPDATE STATUS TOMBOL
+       KOMPRES FOTO
        ========================================================= */
 
-    function updateSubmitStatus(
-        message
+    function compressImage(file) {
+
+        return new Promise(
+            function (resolve, reject) {
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function (event) {
+
+                        const image =
+                            new Image();
+
+
+                        image.onload =
+                            function () {
+
+                                let width =
+                                    image.width;
+
+                                let height =
+                                    image.height;
+
+
+                                /* ---------------------------------
+                                   RESIZE
+                                   --------------------------------- */
+
+                                if (
+                                    width >
+                                        MAX_IMAGE_SIZE ||
+                                    height >
+                                        MAX_IMAGE_SIZE
+                                ) {
+
+                                    if (
+                                        width >
+                                        height
+                                    ) {
+
+                                        height =
+                                            Math.round(
+                                                height *
+                                                (
+                                                    MAX_IMAGE_SIZE /
+                                                    width
+                                                )
+                                            );
+
+                                        width =
+                                            MAX_IMAGE_SIZE;
+
+                                    } else {
+
+                                        width =
+                                            Math.round(
+                                                width *
+                                                (
+                                                    MAX_IMAGE_SIZE /
+                                                    height
+                                                )
+                                            );
+
+                                        height =
+                                            MAX_IMAGE_SIZE;
+
+                                    }
+
+                                }
+
+
+                                /* ---------------------------------
+                                   CANVAS
+                                   --------------------------------- */
+
+                                const canvas =
+                                    document.createElement(
+                                        "canvas"
+                                    );
+
+
+                                canvas.width =
+                                    width;
+
+
+                                canvas.height =
+                                    height;
+
+
+                                const context =
+                                    canvas.getContext(
+                                        "2d"
+                                    );
+
+
+                                context.drawImage(
+                                    image,
+                                    0,
+                                    0,
+                                    width,
+                                    height
+                                );
+
+
+                                /* ---------------------------------
+                                   JPEG
+                                   --------------------------------- */
+
+                                canvas.toBlob(
+                                    function (blob) {
+
+                                        if (!blob) {
+
+                                            reject(
+                                                new Error(
+                                                    "Gagal mengompres foto."
+                                                )
+                                            );
+
+                                            return;
+
+                                        }
+
+
+                                        const blobReader =
+                                            new FileReader();
+
+
+                                        blobReader.onload =
+                                            function () {
+
+                                                resolve(
+                                                    blobReader.result
+                                                );
+
+                                            };
+
+
+                                        blobReader.onerror =
+                                            function () {
+
+                                                reject(
+                                                    new Error(
+                                                        "Gagal membaca foto."
+                                                    )
+                                                );
+
+                                            };
+
+
+                                        blobReader.readAsDataURL(
+                                            blob
+                                        );
+
+                                    },
+                                    "image/jpeg",
+                                    JPEG_QUALITY
+                                );
+
+                            };
+
+
+                        image.onerror =
+                            function () {
+
+                                reject(
+                                    new Error(
+                                        "Foto tidak dapat diproses."
+                                    )
+                                );
+
+                            };
+
+
+                        image.src =
+                            event.target.result;
+
+                    };
+
+
+                reader.onerror =
+                    function () {
+
+                        reject(
+                            new Error(
+                                "Gagal membaca file."
+                            )
+                        );
+
+                    };
+
+
+                reader.readAsDataURL(
+                    file
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       UPLOAD SATU FOTO
+       ========================================================= */
+
+    async function uploadSingleImage(
+        referenceNumber,
+        item
     ) {
+
+        const input =
+            getElement(item.id);
+
+
+        if (
+            !input ||
+            !input.files ||
+            input.files.length === 0
+        ) {
+
+            throw new Error(
+                item.label +
+                " belum dipilih."
+            );
+
+        }
+
+
+        const file =
+            input.files[0];
+
+
+        /* -----------------------------------------------------
+           KOMPRES
+           ----------------------------------------------------- */
+
+        const compressedImage =
+            await compressImage(file);
+
+
+        /* -----------------------------------------------------
+           DATA
+           ----------------------------------------------------- */
+
+        const payload = {
+
+            action: "uploadImage",
+
+            referenceNumber:
+                referenceNumber,
+
+            field:
+                item.field,
+
+            image:
+                compressedImage
+
+        };
+
+
+        /* -----------------------------------------------------
+           KIRIM KE APPS SCRIPT
+           ----------------------------------------------------- */
+
+        await fetch(
+            API_URL,
+            {
+
+                method: "POST",
+
+                mode: "no-cors",
+
+                headers: {
+
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+
+                },
+
+                body:
+                    JSON.stringify(
+                        payload
+                    )
+
+            }
+        );
+
+
+        /*
+           Karena Apps Script Web App
+           digunakan lintas domain,
+           mode no-cors digunakan.
+
+           Browser tidak dapat membaca response,
+           tetapi request tetap dikirim.
+        */
+
+
+        return true;
+
+    }
+
+
+    /* =========================================================
+       UPLOAD 7 FOTO SATU PER SATU
+       ========================================================= */
+
+    async function uploadAllImages(
+        referenceNumber
+    ) {
+
+        for (
+            let i = 0;
+            i < uploadConfig.length;
+            i++
+        ) {
+
+            const item =
+                uploadConfig[i];
+
+
+            updateUploadProgress(
+                i + 1,
+                uploadConfig.length,
+                item.label
+            );
+
+
+            await uploadSingleImage(
+                referenceNumber,
+                item
+            );
+
+
+            /*
+               Jeda kecil agar iPhone tidak
+               terlalu cepat memproses request
+               berikutnya.
+            */
+
+            await sleep(250);
+
+        }
+
+    }
+
+
+    /* =========================================================
+       UPDATE PROGRESS
+       ========================================================= */
+
+    function updateUploadProgress(
+        current,
+        total,
+        label
+    ) {
+
+        const percentage =
+            Math.round(
+                (
+                    (current - 1) /
+                    total
+                ) * 100
+            );
+
 
         if (submitButton) {
 
             submitButton.textContent =
-                message;
+                "Mengunggah " +
+                current +
+                "/" +
+                total +
+                " (" +
+                percentage +
+                "%)";
 
         }
+
+
+        console.log(
+            "Upload " +
+            current +
+            "/" +
+            total +
+            ": " +
+            label
+        );
+
+    }
+
+
+    /* =========================================================
+       SIMPAN DATA PESERTA
+       ========================================================= */
+
+    async function saveParticipant(
+        referenceNumber
+    ) {
+
+        const nama =
+            getElement("nama");
+
+
+        const nik =
+            getElement("nik");
+
+
+        const phone =
+            getElement("phone");
+
+
+        const email =
+            getElement("email");
+
+
+        const kabupaten =
+            getElement("kabupaten");
+
+
+        const payload = {
+
+            action:
+                "saveParticipant",
+
+            referenceNumber:
+                referenceNumber,
+
+            name:
+                nama
+                    ? nama.value.trim()
+                    : "",
+
+            nik:
+                nik
+                    ? nik.value
+                        .replace(/\D/g, "")
+                    : "",
+
+            phone:
+                phone
+                    ? phone.value
+                        .replace(/\D/g, "")
+                    : "",
+
+            email:
+                email
+                    ? email.value.trim()
+                    : "",
+
+            regency:
+                kabupaten
+                    ? kabupaten.value
+                    : ""
+
+        };
+
+
+        await fetch(
+            API_URL,
+            {
+
+                method: "POST",
+
+                mode: "no-cors",
+
+                headers: {
+
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+
+                },
+
+                body:
+                    JSON.stringify(
+                        payload
+                    )
+
+            }
+        );
+
+
+        return true;
+
+    }
+
+
+    /* =========================================================
+       SLEEP
+       ========================================================= */
+
+    function sleep(
+        milliseconds
+    ) {
+
+        return new Promise(
+            function (resolve) {
+
+                setTimeout(
+                    resolve,
+                    milliseconds
+                );
+
+            }
+        );
 
     }
 
@@ -1389,9 +1658,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 event.preventDefault();
 
 
-                /* =================================================
-                   PASTIKAN STEP 3
-                ================================================= */
+                /* ------------------------------------------------
+                   HARUS STEP 3
+                   ------------------------------------------------ */
 
                 if (
                     currentStep !== 3
@@ -1402,9 +1671,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                /* =================================================
+                /* ------------------------------------------------
+                   CEK API URL
+                   ------------------------------------------------ */
+
+                if (
+                    !API_URL ||
+                    API_URL ===
+                    "MASUKKAN_URL_WEB_APP_DI_SINI"
+                ) {
+
+                    alert(
+                        "URL Google Apps Script belum dimasukkan."
+                    );
+
+                    return;
+
+                }
+
+
+                /* ------------------------------------------------
                    CEK PERSETUJUAN
-                ================================================= */
+                   ------------------------------------------------ */
 
                 if (
                     agreement &&
@@ -1421,32 +1709,42 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                clearErrors();
-
-
-                /* =================================================
-                   CEK API URL
-                ================================================= */
+                /* ------------------------------------------------
+                   CEK DATA DIRI
+                   ------------------------------------------------ */
 
                 if (
-                    !API_URL ||
-                    API_URL.includes(
-                        "MASUKKAN_URL"
-                    )
+                    !validatePersonalData()
                 ) {
 
-                    alert(
-                        "URL Google Apps Script belum dimasukkan ke script.js."
-                    );
+                    showStep(1);
 
                     return;
 
                 }
 
 
-                /* =================================================
-                   DISABLE BUTTON
-                ================================================= */
+                /* ------------------------------------------------
+                   CEK FOTO
+                   ------------------------------------------------ */
+
+                if (
+                    !validateUploads()
+                ) {
+
+                    showStep(2);
+
+                    return;
+
+                }
+
+
+                clearErrors();
+
+
+                /* ------------------------------------------------
+                   BUTTON
+                   ------------------------------------------------ */
 
                 if (submitButton) {
 
@@ -1454,58 +1752,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         true;
 
                     submitButton.textContent =
-                        "Menyiapkan data...";
+                        "Menyiapkan...";
 
                 }
 
 
                 try {
 
-                    /* =============================================
-                       AMBIL DATA PESERTA
-                    ============================================= */
-
-                    const nama =
-                        getElement(
-                            "nama"
-                        ).value.trim();
-
-
-                    const nik =
-                        getElement(
-                            "nik"
-                        ).value.trim();
-
-
-                    const phone =
-                        getElement(
-                            "phone"
-                        ).value.trim();
-
-
-                    const email =
-                        getElement(
-                            "email"
-                        ).value.trim();
-
-
-                    const kabupaten =
-                        getElement(
-                            "kabupaten"
-                        ).value;
-
-
-                    /* =============================================
-                       KOMPRES 7 FOTO
-                    ============================================= */
-
-                    const images =
-                        await collectCompressedImages();
-
-
-                    /* =============================================
-                       NOMOR REFERENSI SEMENTARA
-                    ============================================= */
+                    /* --------------------------------------------
+                       GENERATE REFERENCE
+                       -------------------------------------------- */
 
                     const reference =
                         generateReferenceNumber();
@@ -1527,106 +1783,40 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    /* =============================================
-                       PAYLOAD
-                    ============================================= */
+                    /* --------------------------------------------
+                       UPLOAD 7 FOTO
+                       -------------------------------------------- */
 
-                    const payload = {
-
-                        name:
-                            nama,
-
-                        nik:
-                            nik,
-
-                        phone:
-                            phone,
-
-                        email:
-                            email,
-
-                        regency:
-                            kabupaten,
-
-                        selfie:
-                            images.selfie,
-
-                        accountProof:
-                            images.accountProof,
-
-                        newAccount:
-                            images.newAccount,
-
-                        qrisProof:
-                            images.qrisProof,
-
-                        qrisEducation:
-                            images.qrisEducation,
-
-                        postTest:
-                            images.postTest,
-
-                        postTestProof:
-                            images.postTestProof
-
-                    };
-
-
-                    /* =============================================
-                       KIRIM KE APPS SCRIPT
-                    ============================================= */
-
-                    updateSubmitStatus(
-                        "Mengirim data..."
+                    await uploadAllImages(
+                        reference
                     );
 
 
-                    await fetch(
-                        API_URL,
-                        {
-                            method:
-                                "POST",
+                    /* --------------------------------------------
+                       SIMPAN DATA PESERTA
+                       -------------------------------------------- */
 
-                            mode:
-                                "no-cors",
+                    if (submitButton) {
 
-                            headers: {
-                                "Content-Type":
-                                    "text/plain;charset=utf-8"
-                            },
+                        submitButton.textContent =
+                            "Menyimpan data...";
 
-                            body:
-                                JSON.stringify(
-                                    payload
-                                )
-                        }
+                    }
+
+
+                    await sleep(500);
+
+
+                    await saveParticipant(
+                        reference
                     );
 
 
-                    /* =============================================
-                       BERHASIL DIKIRIM
-                       
-                       no-cors membuat browser tidak dapat
-                       membaca response Apps Script.
-                    ============================================= */
+                    /* --------------------------------------------
+                       BERHASIL
+                       -------------------------------------------- */
 
-                    updateSubmitStatus(
-                        "Data terkirim..."
-                    );
-
-
-                    await delay(
-                        800
-                    );
-
-
-                    /* =============================================
-                       TAMPILKAN SUCCESS
-                    ============================================= */
-
-                    if (
-                        participantForm
-                    ) {
+                    if (participantForm) {
 
                         participantForm.style.display =
                             "none";
@@ -1663,12 +1853,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                         successSection.scrollIntoView({
-                            behavior:
-                                "smooth",
-
-                            block:
-                                "start"
+                            behavior: "smooth",
+                            block: "start"
                         });
+
+                    }
+
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            false;
+
+                        submitButton.textContent =
+                            "Kirim Data";
 
                     }
 
@@ -1682,7 +1880,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                     alert(
-                        "Data gagal dikirim.\n\n" +
+                        "Data belum berhasil dikirim.\n\n" +
+                        "Silakan coba lagi.\n\n" +
+                        "Detail: " +
                         error.message
                     );
 
@@ -1706,80 +1906,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       DELAY
-       ========================================================= */
-
-    function delay(
-        milliseconds
-    ) {
-
-        return new Promise(
-            function (resolve) {
-
-                setTimeout(
-                    resolve,
-                    milliseconds
-                );
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       NOMOR REFERENSI
-       ========================================================= */
-
-    function generateReferenceNumber() {
-
-        const date =
-            new Date();
-
-
-        const year =
-            date.getFullYear();
-
-
-        const month =
-            String(
-                date.getMonth() + 1
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        const day =
-            String(
-                date.getDate()
-            ).padStart(
-                2,
-                "0"
-            );
-
-
-        const random =
-            Math.floor(
-                1000 +
-                Math.random() * 9000
-            );
-
-
-        return (
-            "SD-" +
-            year +
-            month +
-            day +
-            "-" +
-            random
-        );
-
-    }
-
-
-    /* =========================================================
-       PESERTA BARU
+       NEW PARTICIPANT
        ========================================================= */
 
     if (newParticipant) {
@@ -1797,9 +1924,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 /* RESET FORM */
 
-                if (
-                    participantForm
-                ) {
+                if (participantForm) {
 
                     participantForm.reset();
 
@@ -1813,11 +1938,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 /* RESET PREVIEW */
 
-                uploadInputs.forEach(
-                    function (id) {
+                uploadConfig.forEach(
+                    function (item) {
 
                         const input =
-                            getElement(id);
+                            getElement(
+                                item.id
+                            );
 
 
                         if (input) {
@@ -1851,29 +1978,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
 
-                /* RESET SUCCESS */
-
-                const successSection =
-                    getElement(
-                        "successSection"
-                    );
-
-
-                if (
-                    successSection
-                ) {
-
-                    successSection.style.display =
-                        "none";
-
-                }
-
-
                 /* TAMPILKAN FORM */
 
-                if (
-                    participantForm
-                ) {
+                if (participantForm) {
 
                     participantForm.style.display =
                         "block";
@@ -1895,23 +2002,47 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                /* STEP 1 */
+                const successSection =
+                    getElement(
+                        "successSection"
+                    );
+
+
+                if (
+                    successSection
+                ) {
+
+                    successSection.style.display =
+                        "none";
+
+                }
+
+
+                /* RESET BUTTON */
+
+                if (submitButton) {
+
+                    submitButton.disabled =
+                        false;
+
+                    submitButton.textContent =
+                        "Kirim Data";
+
+                }
+
+
+                /* KEMBALI STEP 1 */
 
                 showStep(1);
 
 
                 /* SCROLL */
 
-                if (
-                    formSection
-                ) {
+                if (formSection) {
 
                     formSection.scrollIntoView({
-                        behavior:
-                            "smooth",
-
-                        block:
-                            "start"
+                        behavior: "smooth",
+                        block: "start"
                     });
 
                 }
@@ -1959,6 +2090,5 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(
         "Sanak Digital JS berhasil dijalankan."
     );
-
 
 });
